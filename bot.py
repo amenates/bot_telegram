@@ -3,6 +3,7 @@ from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 import settings
 import ephem
 import datetime
+import settings as settings
 
 logging.basicConfig(filename='bot.log', level=logging.INFO, encoding='utf-8')
 

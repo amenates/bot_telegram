@@ -1,29 +1,15 @@
-"""
-Домашнее задание №1
-
-Использование библиотек: ephem
-
-* Установите модуль ephem
-* Добавьте в бота команду /planet, которая будет принимать на вход
-  название планеты на английском, например /planet Mars
-* В функции-обработчике команды из update.message.text получите
-  название планеты (подсказка: используйте .split())
-* При помощи условного оператора if и ephem.constellation научите
-  бота отвечать, в каком созвездии сегодня находится планета.
-
-"""
 import logging
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 import ephem
 import datetime
-import settings as settings
-import random
 
-logging.basicConfig(filename='bot.log', level=logging.INFO, encoding='utf-8')
+import src.settings as settings
+from lib.building import Building
+import src.constants as constants
 
-
-def random_planet(planets):
-    return random.choice(planets)
+logging.basicConfig(filename='logs/bot.log',
+                    level=logging.INFO,
+                    encoding='utf-8')
 
 
 def in_what_constellation(update, context):
@@ -52,7 +38,7 @@ def in_what_constellation(update, context):
             f'Сегодня планета {planet} находится в созвездии {constellation}')
     except KeyError:
         update.message.reply_text(
-            f"Такой планеты нет, попробуйте ввести /planet {random_planet(['mercury', 'venus', 'mars', 'jupiter', 'saturn', 'uranus', 'neptune'])}"
+            f"Такой планеты нет, попробуйте ввести /planet {Building.random_selection_from_list(constants.RANDOM_PLANET)}"
         )
 
 

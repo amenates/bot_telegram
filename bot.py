@@ -1,26 +1,40 @@
+"""
+Домашнее задание №1
+
+Использование библиотек: ephem
+
+* Установите модуль ephem
+* Добавьте в бота команду /planet, которая будет принимать на вход
+  название планеты на английском, например /planet Mars
+* В функции-обработчике команды из update.message.text получите
+  название планеты (подсказка: используйте .split())
+* При помощи условного оператора if и ephem.constellation научите
+  бота отвечать, в каком созвездии сегодня находится планета.
+
+"""
 import logging
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
-import settings
 import ephem
 import datetime
 import settings as settings
+import random
 
 logging.basicConfig(filename='bot.log', level=logging.INFO, encoding='utf-8')
 
 
+def random_planet(planets):
+    return random.choice(planets)
+
+
 def in_what_constellation(update, context):
-    print('Вызвана комманда - /planet')
 
     user_text = update.message.text
-    update.message.reply_text(f'Привет пользователь! Ты написал {user_text}')
 
     dt = datetime.datetime.today()
     user_dt = f'{dt.year}/{dt.month}/{dt.day}'
 
-    # В переменную записывается планета указанная пользователем
     for planet in user_text.split():
         planet = planet.lower()
-    print(f'Пользовательская планета: {planet}')
 
     planets = {
         'mercury': ephem.Mercury(user_dt),
@@ -34,12 +48,12 @@ def in_what_constellation(update, context):
 
     try:
         constellation = ephem.constellation(planets[planet])
-        print(constellation)
+        update.message.reply_text(
+            f'Сегодня планета {planet} находится в созвездии {constellation}')
     except KeyError:
-        print('Такой планеты нет')
-
-    update.message.reply_text(
-        f'Планета {planet} находится в созвездии {constellation}')
+        update.message.reply_text(
+            f"Такой планеты нет, попробуйте ввести /planet {random_planet(['mercury', 'venus', 'mars', 'jupiter', 'saturn', 'uranus', 'neptune'])}"
+        )
 
 
 def greet_user(update, context):

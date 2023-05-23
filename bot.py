@@ -38,7 +38,7 @@ def in_what_constellation(update, context):
             f'Сегодня планета {planet} находится в созвездии {constellation}')
     except KeyError:
         update.message.reply_text(
-            f"Такой планеты нет, попробуйте ввести /planet {Building.random_selection_from_list(constants.RANDOM_PLANET)}"
+            f"Такой планеты нет, попробуйте ввести /planet {Building.random_selection_from_list(constants.PLANETS)}"
         )
 
 
